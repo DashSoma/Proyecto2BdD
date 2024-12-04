@@ -8,13 +8,13 @@ package User;
  *
  * @author Usuario
  */
-public class LoginDTO {
+public class UserDTO {
     private final int id;
     private final String nombre;
     private final String correo;
     private final String pass;
 
-    public LoginDTO(int id, String nombre, String correo, String pass) {
+    public UserDTO(int id, String nombre, String correo, String pass) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;

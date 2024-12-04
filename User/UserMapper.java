@@ -5,19 +5,16 @@
 package User;
 
 import Modelo.Mapper.Mapper;
-import Modelo.Proveedores.Proveedor;
-import Modelo.Proveedores.ProveedorDTO;
 
 /**
  *
  * @author Usuario
  */
-public class LoginMapper implements Mapper<login, LoginDTO> {
+public class UserMapper implements Mapper<User, UserDTO> {
 
     @Override
-    public LoginDTO toDTO(login ent) {
-
-        return new LoginDTO(
+    public UserDTO toDTO(User ent) {
+        return new UserDTO(
                 ent.getId(),
                 ent.getNombre(),
                 ent.getCorreo(),
@@ -26,8 +23,8 @@ public class LoginMapper implements Mapper<login, LoginDTO> {
     }
 
     @Override
-    public login toEnt(LoginDTO dto) {
-        return new login(
+    public User toEnt(UserDTO dto) {
+        return new User(
                 dto.getId(),
                 dto.getNombre(),
                 dto.getCorreo(),

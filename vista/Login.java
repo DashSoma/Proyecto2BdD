@@ -4,8 +4,6 @@
  */
 package vista;
 
-import BaseDatos.DataBase;
-import User.Conexion;
 import User.LoginDAO;
 import User.login;
 import javax.swing.JOptionPane;
@@ -16,8 +14,10 @@ import vista.Proveedor.FrmProveedor;
  * @author dashs
  */
 public class Login extends javax.swing.JFrame {
+
     login lg = new login();
-//    LoginDAO login = new LoginDAO(DataBase.getConnection());
+    LoginDAO login = new LoginDAO();
+
     /**
      * Creates new form Login
      */
@@ -26,20 +26,20 @@ public class Login extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public void validar(){
+    public void validar() {
         String nombre = txtCorreo.getText();
         String pass = String.valueOf(txtPass.getText());
-        if(!"".equals(nombre)||!"".equals(pass));
+        if (!"".equals(nombre) || !"".equals(pass));
         lg = login.log(nombre, pass);
-        if (lg.getCorreo()!=null && lg.getPass()!=null){
+        if (lg.getCorreo() != null && lg.getPass() != null) {
+            FrmProveedor view = new FrmProveedor(null, true);
+            view.setVisible(true);
             dispose();
-            
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Nombre o contraseña incorrectas");
         }
-        
     }
-        
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -165,14 +165,12 @@ public class Login extends javax.swing.JFrame {
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:
         validar();
-        FrmProveedor view = new FrmProveedor(null, true);
-        view.setVisible(true);
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void btnCrearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearCuentaActionPerformed
         // TODO add your handling code here:
-        
-        
+        CrearC view = new CrearC(null, true);
+        view.setVisible(true);
     }//GEN-LAST:event_btnCrearCuentaActionPerformed
 
     /**

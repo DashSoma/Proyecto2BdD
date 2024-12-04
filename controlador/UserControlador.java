@@ -5,9 +5,9 @@
 package controlador;
 
 import BaseDatos.DataBase;
-import User.LoginDAO;
-import User.LoginMapper;
-import User.login;
+import User.UserDAO;
+import User.UserMapper;
+import User.User;
 import java.sql.SQLException;
 import vista.Vista;
 
@@ -17,22 +17,22 @@ import vista.Vista;
  */
 public class UserControlador {
 
-    private LoginDAO dao;
+    private UserDAO dao;
     private final Vista vista;
-    private final LoginMapper mapper;
+    private final UserMapper mapper;
 
     public UserControlador(Vista vista) {
         this.vista = vista;
-        mapper = new LoginMapper();
+        mapper = new UserMapper();
 
         try {
-            dao = new LoginDAO(DataBase.getConnection());
+            dao = new UserDAO(DataBase.getConnection());
         } catch (SQLException ex) {
             vista.showError("Error al conectar con la Base de Datos");
         }
     }
 
-    public boolean create(login log) throws SQLException {
+    public boolean create(User log) throws SQLException {
         if (log == null || !validateRequired(log)) {
             vista.showError("Faltan datos requeridos");
             return false;
@@ -46,7 +46,7 @@ public class UserControlador {
         return false;
     }
 
-    public boolean validateRequired(login log) {
+    public boolean validateRequired(User log) {
         return log.getNombre() != null && !log.getNombre().trim().isEmpty()
                 && log.getCorreo() != null && !log.getCorreo().trim().isEmpty()
                 && log.getPass() != null && !log.getPass().trim().isEmpty();

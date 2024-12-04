@@ -6,18 +6,28 @@ package User;
 
 /**
  *
- * @author dashs
+ * @author DaniTini
  */
-public class login {
+public class User {
     private int id;
     private String nombre;
     private String correo;
     private String pass;
 
-    public login() {
+    public User(int id) {
+        this.id = id;
     }
 
-    public login(int id, String nombre, String correo, String pass) {
+    public User() {
+    }
+
+    public User(String nombre, String correo, String pass) {
+        this.nombre = nombre;
+        this.correo = correo;
+        this.pass = pass;
+    }
+    
+    public User(int id, String nombre, String correo, String pass) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;

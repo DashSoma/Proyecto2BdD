@@ -4,18 +4,32 @@
  */
 package vista;
 
+import User.User;
+import controlador.UserControlador;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author dashs
  */
-public class CrearC extends javax.swing.JDialog {
+public class CrearC extends javax.swing.JDialog implements Vista<User> {
+
+    UserControlador Controlador;
+    User user;
 
     /**
      * Creates new form Recuperar
      */
+    public CrearC() {
+        initComponents();
+    }
+
     public CrearC(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        Controlador = new UserControlador(this);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -132,9 +146,16 @@ public class CrearC extends javax.swing.JDialog {
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         // TODO add your handling code here:
-        
-        
-        
+        try {
+            user = new User(txtNombre.getText(), txtCorreo.getText(),
+                    txtContraseña.getText());
+            Controlador.create(user);
+            Login view = new Login();
+            view.setVisible(true);
+        } catch (Exception e) {
+            showError("Error al agregar proveedor: " + e.getMessage());
+        }
+
     }//GEN-LAST:event_btnCrearActionPerformed
 
     /**
@@ -191,4 +212,35 @@ public class CrearC extends javax.swing.JDialog {
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void show(User ent) {
+        user = ent;
+        if (ent == null) {
+            return;
+        }
+        txtNombre.setText(user.getNombre());
+        txtCorreo.setText(user.getCorreo());
+        txtContraseña.setText(user.getPass());
+    }
+
+    @Override
+    public void showAll(List<User> ents) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void showMessage(String msg) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void showError(String err) {
+        JOptionPane.showMessageDialog(this, "Error: " + err, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public boolean validateRequired() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
