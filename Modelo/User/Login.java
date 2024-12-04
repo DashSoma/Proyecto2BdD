@@ -2,22 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package User;
+package Modelo.User;
 
 /**
  *
  * @author dashs
  */
-public class login {
+public class Login {
     private int id;
     private String nombre;
     private String correo;
     private String pass;
 
-    public login() {
+    public Login() {
     }
 
-    public login(int id, String nombre, String correo, String pass) {
+    public Login(int id, String nombre, String correo, String pass) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;

@@ -4,7 +4,7 @@
  */
 package vista;
 
-import clases.Productos;
+import Modelo.Producto.Productos;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;

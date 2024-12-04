@@ -78,15 +78,6 @@ public class Proveedor {
         
     }
     
-//    
-//    
-//    public Proveedor() {
-//        this.id = 1;
-//        this.nombre = "";
-//        this.contacto = "";
-//        this.direccion = "";
-//    }
-
     public Proveedor() {
     }
 

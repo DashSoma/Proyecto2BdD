@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package User;
+package Modelo.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,8 +18,8 @@ public class LoginDAO {
     ResultSet rs;
     Conexion cn = new Conexion();
     
-    public login log(String nombre, String pass){
-        login l = new login();
+    public Login log(String nombre, String pass){
+        Login l = new Login();
         String sql = "SELECT * FROM usuarios WHERE nombre= ? AND pass = ?";
         try{
             con = cn.getConnection();

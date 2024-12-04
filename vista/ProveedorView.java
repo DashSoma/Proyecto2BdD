@@ -1,28 +1,28 @@
-package vista.Proveedor;
+package vista;
 
+import Modelo.Vista.Vista;
 import Modelo.Proveedores.Proveedor;
 import controlador.ProveedorControlador;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
-import vista.Vista;
 
 /**
  *
  * @author dashs
  */
-public class FrmProveedor extends javax.swing.JDialog implements Vista<Proveedor> {
+public class ProveedorView extends javax.swing.JDialog implements Vista<Proveedor> {
 
     ProveedorControlador Controlador;
     Proveedor proveedor;
     DefaultTableModel model;
 
-    public FrmProveedor() {
+    public ProveedorView() {
         initComponents();
     }
 
-    public FrmProveedor(java.awt.Frame parent, boolean modal) {
+    public ProveedorView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         //Permite hacer la referencia a la conexión de Base de Datos
@@ -69,7 +69,7 @@ public class FrmProveedor extends javax.swing.JDialog implements Vista<Proveedor
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Gestión de Proveedores");
+        setTitle("Gestión de Directores ");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -465,14 +465,18 @@ public class FrmProveedor extends javax.swing.JDialog implements Vista<Proveedor
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProveedorView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProveedorView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProveedorView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProveedorView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -482,7 +486,7 @@ public class FrmProveedor extends javax.swing.JDialog implements Vista<Proveedor
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrmProveedor dialog = new FrmProveedor(new javax.swing.JFrame(), true);
+                ProveedorView dialog = new ProveedorView(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -559,6 +563,11 @@ public class FrmProveedor extends javax.swing.JDialog implements Vista<Proveedor
     @Override
     public boolean validateRequired() {
         return txtNombre != null && !txtNombre.getText().trim().isEmpty();
+    }
+
+    @Override
+    public void showWarnig(String warning) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
