@@ -3,6 +3,8 @@ package vista;
 import Modelo.Vista.Vista;
 import Modelo.Producto.Productos;
 import Modelo.Proveedores.Proveedor;
+import clases.otro;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -12,6 +14,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import controlador.ProductosControlador;
+import controlador.ProveedorControlador;
 import java.io.IOException;
 import java.util.List;
 
