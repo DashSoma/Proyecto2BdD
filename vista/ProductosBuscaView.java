@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Christian y Reyman
+ * @author Chrisp
  */
 public class ProductosBuscaView extends javax.swing.JDialog {
 
@@ -68,7 +68,7 @@ public class ProductosBuscaView extends javax.swing.JDialog {
             }
         });
 
-        lblBuscar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblBuscar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblBuscar.setText("Buscar:");
 
         txtBuscar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -96,7 +96,9 @@ public class ProductosBuscaView extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tblProductos);
 
-        btnSeleccionar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnSeleccionar.setBackground(new java.awt.Color(0, 51, 102));
+        btnSeleccionar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSeleccionar.setForeground(new java.awt.Color(255, 255, 255));
         btnSeleccionar.setText("Seleccionar");
         btnSeleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,29 +112,27 @@ public class ProductosBuscaView extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(34, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblBuscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSeleccionar)
-                        .addGap(68, 68, 68))))
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSeleccionar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBuscar)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSeleccionar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -143,8 +143,8 @@ public class ProductosBuscaView extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        String titulos[] = {"Cédula", "Nombre", "Fecha de nacimiento", "Fecha de ingreso", "Fecha de despido",
-            "Dirección", "Teléfono", "Email", "Puesto", "CédulaJefe"};
+        String titulos[] = {"Codigo", "Nombre", "Categoria", "Precio", "CantidadDisponible",
+            "Proveedor"};
         model = new DefaultTableModel(null, titulos);
 
         for (int i = 0; i < lista.size(); i++) {
@@ -185,7 +185,7 @@ public class ProductosBuscaView extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     public void mostrarTabla() {
-        String titulos[] = {"Cédula", "Nombre", "Categoría",
+        String titulos[] = {"Codigo", "Nombre", "Categoría",
             "Precio", "CantDisponible", "Proveedor", "FechaProductoIngresado"};
         model = new DefaultTableModel(null, titulos);
         //No se usó el foreach porque el índice no lo estamos necesitando 
