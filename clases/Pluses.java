@@ -4,7 +4,7 @@ package clases;
  * Clase que representa el plus que se le puede asignar a un empleado.
  *
  * 
- * @author Cristian y Reyman 
+ * @author Crisp
  */
 public class Pluses {
 

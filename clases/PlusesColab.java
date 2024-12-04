@@ -3,7 +3,7 @@ package clases;
 /**
  * Clase que representa la relación entre un colaborador (empleado) y los pluses asignados.
  * 
- * @author Cristian y Reyman 
+ * @author Crisp 
  */
 public class PlusesColab {
 
