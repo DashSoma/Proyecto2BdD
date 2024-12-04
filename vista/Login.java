@@ -24,16 +24,16 @@ public class Login extends javax.swing.JFrame {
     }
 
     public void validar(){
-        String usuario = txtCorreo.getText();
+        String nombre = txtCorreo.getText();
         String pass = String.valueOf(txtPass.getText());
-        if(!"".equals(usuario)||!"".equals(pass));
-        lg = login.log(usuario, pass);
+        if(!"".equals(nombre)||!"".equals(pass));
+        lg = login.log(nombre, pass);
         if (lg.getCorreo()!=null && lg.getPass()!=null){
 //            Principal sis = new Principal();
 //            sis.setVisible(true);
             dispose();
         }else{
-            JOptionPane.showMessageDialog(null, "Correo o contraseña incorrectas");
+            JOptionPane.showMessageDialog(null, "Nombre o contraseña incorrectas");
         }
         
     }
