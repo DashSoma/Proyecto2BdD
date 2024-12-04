@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Modelo.Proveedor;
+package Modelo.Proveedores;
 
 import Modelo.Mapper.Mapper;
 import java.sql.SQLException;
 
 /**
  *
- * @author crisp
+ * @author dashs
  */
 public class ProveedorMapper implements Mapper<Proveedor, ProveedorDTO>{
 

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import vista.Cliente.FrmCliente;
+import vista.Cliente.FrmCliente11;
 import vista.Proveedor.FrmProveedor;
 
 /*
@@ -23,7 +23,7 @@ import vista.Proveedor.FrmProveedor;
  *
  * @author Crisp
  */
-public class Principal extends javax.swing.JFrame {
+public class PaniSys extends javax.swing.JFrame {
 
     //Creación de todos los ArrayList para luego ser llamados.
     ArrayList<Productos> listaC = new ArrayList();
@@ -36,7 +36,7 @@ public class Principal extends javax.swing.JFrame {
     /**
      * Creates new form PaniSys
      */
-    public Principal() {
+    public PaniSys() {
         initComponents();
         setLocationRelativeTo(null);
 
@@ -230,7 +230,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGetionProveedorSIBDActionPerformed
 
     private void btnBDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBDActionPerformed
-        FrmCliente view = new FrmCliente(null, true);
+        FrmCliente11 view = new FrmCliente11(null, true);
         view.setVisible(true);
     }//GEN-LAST:event_btnBDActionPerformed
     
@@ -259,23 +259,20 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PaniSys.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PaniSys.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PaniSys.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PaniSys.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                new PaniSys().setVisible(true);
             }
         });
     }

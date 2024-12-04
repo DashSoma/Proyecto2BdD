@@ -1,4 +1,4 @@
-package otros;
+package clases;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
  *
  * @author Crisp
  */
-public class Productos2 {
+public class Productos {
 
     private int codigo;
     private String nombre;
@@ -20,7 +20,7 @@ public class Productos2 {
     private LocalDate fechaPIngresado = LocalDate.now();
     private int vTotalInventario;
 
-    public Productos2(int codigo, String nombre, String categoria, int precio, int cantDisponible, String proveedor, LocalDate fechaDespido, int vTotalInventario) {
+    public Productos(int codigo, String nombre, String categoria, int precio, int cantDisponible, String proveedor, LocalDate fechaDespido, int vTotalInventario) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.categoria = categoria;
@@ -35,7 +35,7 @@ public class Productos2 {
      * Constructor por defecto que inicializa los atributos con valores
      * predeterminados.
      */
-    public Productos2() {
+    public Productos() {
         this.codigo = 0;
         this.nombre = "";
         this.categoria = "";
@@ -110,10 +110,10 @@ public class Productos2 {
         this.vTotalInventario = vTotalInventario;
     }
 
-    public static int calcularTotalInventario(ArrayList<Productos2> listaProductos) {
+    public static int calcularTotalInventario(ArrayList<Productos> listaProductos) {
         int totalPrecios = 0;
 
-        for (Productos2 producto : listaProductos) {
+        for (Productos producto : listaProductos) {
             int precio = producto.getPrecio();
             totalPrecios += precio;
         }

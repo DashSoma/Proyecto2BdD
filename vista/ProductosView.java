@@ -1,7 +1,7 @@
 package vista;
 
-import otros.Productos2;
-import otros.Proveedor2;
+import clases.Productos;
+import clases.Proveedor;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -20,12 +20,12 @@ import java.io.IOException;
 public class ProductosView extends javax.swing.JDialog {
 
     //Array Lits y objetos de clases determinadas
-    Productos2 productos;
-    ArrayList<Productos2> lista;
-    ArrayList<Proveedor2> listaP;
+    Productos productos;
+    ArrayList<Productos> lista;
+    ArrayList<Proveedor> listaP;
     DefaultTableModel model;
 
-    public ProductosView(java.awt.Frame parent, boolean modal, ArrayList<Productos2> lista, ArrayList<Proveedor2> listaP) {
+    public ProductosView(java.awt.Frame parent, boolean modal, ArrayList<Productos> lista, ArrayList<Proveedor> listaP) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
@@ -413,7 +413,7 @@ public class ProductosView extends javax.swing.JDialog {
             return;
         }
 
-        Productos2 productos = new Productos2();
+        Productos productos = new Productos();
         productos.setCodigo(Integer.parseInt(txtCodigo.getText()));
         productos.setNombre(txtNombre.getText());
         productos.setCategoria(txtCategoria.getText());
@@ -460,7 +460,7 @@ public class ProductosView extends javax.swing.JDialog {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (tblProductos.getSelectedRowCount() == 1) {
             int fila = tblProductos.getSelectedRow();
-            productos = new Productos2();
+            productos = new Productos();
 
             if (!txtNombre.getText().isEmpty()) {
                 try {
@@ -521,7 +521,7 @@ public class ProductosView extends javax.swing.JDialog {
         btnGenerarPDF.setVisible(false);
         btnVerTDatos.setVisible(false);
         if (cmbProveedor.getItemCount() <= 0) {
-            for (Proveedor2 p : listaP) {
+            for (Proveedor p : listaP) {
                 cmbProveedor.addItem(p.getNombre());
             }
         }
@@ -646,7 +646,7 @@ public class ProductosView extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGenerarPDFActionPerformed
 
     private void btnTotalInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTotalInventarioActionPerformed
-        Productos2.calcularTotalInventario(lista);
+        Productos.calcularTotalInventario(lista);
     }//GEN-LAST:event_btnTotalInventarioActionPerformed
     /**
      * Método para verificar que la cédula sea única
@@ -777,14 +777,6 @@ public class ProductosView extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(ProductosView.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

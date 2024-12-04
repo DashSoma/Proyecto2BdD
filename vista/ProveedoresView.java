@@ -1,23 +1,28 @@
 package vista;
 
-import Modelo.Proveedor.Proveedor;
-
+import clases.Proveedor;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import otros.Proveedor2;
 
 /**
  *
- * @author Christian
+ * @author Chrisp
  */
 public class ProveedoresView extends javax.swing.JDialog {
 
-    Proveedor2 puestos;
-    ArrayList<Proveedor2> lista;
+    //Array Lits y objetos de clases determinadas
+    Proveedor puestos;
+    ArrayList<Proveedor> lista;
     DefaultTableModel model;
 
-    public ProveedoresView(java.awt.Frame parent, boolean modal, ArrayList<Proveedor2> lista) {
+    /**
+     *
+     * @param parent
+     * @param modal
+     * @param lista de puestos.
+     */
+    public ProveedoresView(java.awt.Frame parent, boolean modal, ArrayList<Proveedor> lista) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
@@ -205,6 +210,11 @@ public class ProveedoresView extends javax.swing.JDialog {
         lblBuscar.setText("Buscar: ");
 
         txtBuscar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarKeyReleased(evt);
@@ -269,7 +279,11 @@ public class ProveedoresView extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-     
+     /**
+     * Botón para limpiar los campos de escritura o asignación.
+     *
+     * @param evt ActionPerformed
+     */
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         txtNombre.setText("");
         txtContacto.setText("");
@@ -282,7 +296,7 @@ public class ProveedoresView extends javax.swing.JDialog {
      */
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
         if (!txtNombre.getText().isEmpty() && !txtContacto.getText().isEmpty() && !txtDireccion.getText().isEmpty()) {
-            puestos = new Proveedor2();
+            puestos = new Proveedor();
             try {
                 puestos.setNombre(txtNombre.getText());
                 puestos.setContacto(txtContacto.getText());
@@ -369,7 +383,7 @@ public class ProveedoresView extends javax.swing.JDialog {
         if (tblPuestos.getSelectedRowCount() == 1) {
 
             int fila = tblPuestos.getSelectedRow();
-            puestos = new Proveedor2();
+            puestos = new Proveedor();
 
             if (!txtNombre.getText().isEmpty()) {
 
@@ -405,6 +419,10 @@ public class ProveedoresView extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscarKeyTyped
 
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
+
     /**
      * Método para verificar que el ID sea única
      *
@@ -412,7 +430,7 @@ public class ProveedoresView extends javax.swing.JDialog {
      * @return
      */
     public boolean existe(int id) {
-        Proveedor2 puestoBusca;
+        Proveedor puestoBusca;
         for (int i = 0; i < lista.size(); i++) {
             puestoBusca = lista.get(i);
             if (puestoBusca.getIdPuesto() == id) {
@@ -426,7 +444,7 @@ public class ProveedoresView extends javax.swing.JDialog {
      * Muestra los datos y títulos en el JTable
      */
     public void mostrarTabla() {
-        puestos = new Proveedor2();
+        puestos = new Proveedor();
         String titulos[] = {"Id", "Nombre", "Contacto", "Dirección"};
         model = new DefaultTableModel(null, titulos);
 
@@ -467,38 +485,6 @@ public class ProveedoresView extends javax.swing.JDialog {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ProveedoresView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

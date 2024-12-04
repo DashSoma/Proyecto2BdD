@@ -1,7 +1,6 @@
-package vista;
+package vista.Proveedor;
 
-
-import Modelo.Proveedor.Proveedor;
+import Modelo.Proveedores.Proveedor;
 import controlador.ProveedorControlador;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -474,10 +473,6 @@ public class FrmProveedor extends javax.swing.JDialog implements Vista<Proveedor
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FrmProveedor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

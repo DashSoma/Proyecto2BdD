@@ -6,7 +6,7 @@ package Modelo.Mapper;
 
 /**
  *
- * @author crisp
+ * @author dashs
  */
 public interface Mapper <Ent,DTO>{
     public DTO toDTO(Ent ent);

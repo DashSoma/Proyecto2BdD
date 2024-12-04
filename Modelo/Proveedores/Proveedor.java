@@ -1,14 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package Modelo.Proveedor;
+package Modelo.Proveedores;
 
 /**
  *
- * @author dashs
+ * @author Crisp
  */
 public class Proveedor {
+
     private int id;
     private String nombre;
     private String contacto;
@@ -32,7 +29,7 @@ public class Proveedor {
 
     public void setId(int id) {
         if (id <= 0) {
-            throw new IllegalArgumentException("El ID");
+            throw new IllegalArgumentException("El ID debe ser mayor a 0.");
         }
         this.id = id;
     }
@@ -80,6 +77,15 @@ public class Proveedor {
         this.contacto = contacto;
         
     }
+    
+//    
+//    
+//    public Proveedor() {
+//        this.id = 1;
+//        this.nombre = "";
+//        this.contacto = "";
+//        this.direccion = "";
+//    }
 
     public Proveedor() {
     }

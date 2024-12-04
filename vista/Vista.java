@@ -4,6 +4,7 @@
  */
 package vista;
 
+import Modelo.Clientes.Cliente;
 import java.util.List;
 
 /**

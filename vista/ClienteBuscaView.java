@@ -5,21 +5,23 @@
 package vista;
 
 import Modelo.Clientes.Cliente;
+import clases.Productos;
 import controlador.ClienteControlador;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import vista.Cliente.FrmCliente11;
 
 /**
  *
- * @author chrisp
+ * @author Christian y Reyman
  */
 public class ClienteBuscaView extends javax.swing.JDialog {
 
     private ClienteControlador clienteController;
-    private FrmCliente vista;
+    private FrmCliente11 vista;
 
     public ClienteBuscaView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -27,7 +29,7 @@ public class ClienteBuscaView extends javax.swing.JDialog {
         setLocationRelativeTo(null);
 
         // Crear la vista de FrmCliente11
-        vista = new FrmCliente(parent, modal);
+        vista = new FrmCliente11(parent, modal);
 
         // Inicializar el controlador con la vista correcta
         clienteController = new ClienteControlador(vista);

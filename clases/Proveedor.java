@@ -1,10 +1,10 @@
-package otros;
+package clases;
 /**
  * Clase que representa los puestos de trabajo.
  * 
  * @author Crisp 
  */
-public class Proveedor2 {
+public class Proveedor {
     
     private static int idIncremental = 1;
     private int idPuesto;
@@ -12,14 +12,14 @@ public class Proveedor2 {
     private String contacto;
     private String direccion;
    
-    public Proveedor2(String nombre, String contacto, String direccion) {
+    public Proveedor(String nombre, String contacto, String direccion) {
         this.idPuesto = idIncremental++;  // Incrementa el ID solo una vez
         this.nombre = nombre;
         this.contacto = contacto;
         this.direccion = direccion;
     }
     
-    public Proveedor2() {
+    public Proveedor() {
         this.idPuesto = idIncremental++;  // Incrementa el ID solo una vez
         this.nombre = "";
         this.contacto = "";
@@ -31,7 +31,7 @@ public class Proveedor2 {
     }
     
     public static void setIdIncremental(int idIncremental) {
-        Proveedor2.idIncremental = idIncremental;
+        Proveedor.idIncremental = idIncremental;
     }
     
     public int getIdPuesto() {

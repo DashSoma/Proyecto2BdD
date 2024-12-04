@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 /**
  *
- * @author crisp
+ * @author munoz
  */
 public abstract class DAO<Dto> {
     protected Connection connection;

@@ -5,11 +5,11 @@
 package controlador;
 
 
-import DateBase.DataBase;
-import Modelo.Proveedor.Proveedor;
-import Modelo.Proveedor.ProveedorDAO;
-import Modelo.Proveedor.ProveedorDTO;
-import Modelo.Proveedor.ProveedorMapper;
+import BaseDatos.DataBase;
+import Modelo.Proveedores.Proveedor;
+import Modelo.Proveedores.ProveedorDAO;
+import Modelo.Proveedores.ProveedorDTO;
+import Modelo.Proveedores.ProveedorMapper;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +18,7 @@ import vista.Vista;
 
 /**
  *
- * @author crisp
+ * @author La comadre dashs
  */
 public class ProveedorControlador {
 

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controlador;
-import DateBase.DataBase;
+import BaseDatos.DataBase;
 import Modelo.Clientes.Cliente;
 import Modelo.Clientes.ClienteDAO;
 import Modelo.Clientes.ClienteDTO;
