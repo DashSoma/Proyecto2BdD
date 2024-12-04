@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import vista.Cliente.FrmCliente11;
+import vista.Cliente.FrmCliente;
 
 /**
  *
@@ -46,7 +46,7 @@ public class VentasView extends javax.swing.JDialog {
     ArrayList<Productos> listaC;
     ArrayList<Proveedor> listaPuesto;
     ClienteControlador clienteController;
-    private FrmCliente11 vista;
+    private FrmCliente vista;
     DefaultTableModel model;
 
     /**
@@ -70,7 +70,7 @@ public class VentasView extends javax.swing.JDialog {
         this.listaPColab = listaPColab;
         this.listaPluses = listaPluses;
         this.listaC = listaC;
-        vista = new FrmCliente11();
+        vista = new FrmCliente();
         clienteController = new ClienteControlador(vista);
 
         setLocationRelativeTo(null);

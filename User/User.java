@@ -66,5 +66,4 @@ public class User {
         this.correo = correo;
     }
     
-    
 }

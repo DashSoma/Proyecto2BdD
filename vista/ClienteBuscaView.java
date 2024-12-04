@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import vista.Cliente.FrmCliente11;
+import vista.Cliente.FrmCliente;
 
 /**
  *
@@ -21,15 +21,15 @@ import vista.Cliente.FrmCliente11;
 public class ClienteBuscaView extends javax.swing.JDialog {
 
     private ClienteControlador clienteController;
-    private FrmCliente11 vista;
+    private FrmCliente vista;
 
     public ClienteBuscaView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
 
-        // Crear la vista de FrmCliente11
-        vista = new FrmCliente11(parent, modal);
+        // Crear la vista de FrmCliente
+        vista = new FrmCliente(parent, modal);
 
         // Inicializar el controlador con la vista correcta
         clienteController = new ClienteControlador(vista);
@@ -37,7 +37,7 @@ public class ClienteBuscaView extends javax.swing.JDialog {
         // Cargar los datos
         clienteController.readAll();
 
-        // Copiar los datos de la tabla de FrmCliente11 a esta tabla
+        // Copiar los datos de la tabla de FrmCliente a esta tabla
         copiarDatosDeTabla(vista.getTblColaborador());
     }
     // Método para copiar los datos de una tabla a otra

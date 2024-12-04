@@ -69,7 +69,7 @@ public class FrmProveedor extends javax.swing.JDialog implements Vista<Proveedor
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Gestión de Directores ");
+        setTitle("Gestión de Proveedores");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);

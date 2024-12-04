@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import vista.Cliente.FrmCliente11;
+import vista.Cliente.FrmCliente;
 import vista.Proveedor.FrmProveedor;
 
 /*
@@ -230,7 +230,7 @@ public class PaniSys extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGetionProveedorSIBDActionPerformed
 
     private void btnBDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBDActionPerformed
-        FrmCliente11 view = new FrmCliente11(null, true);
+        FrmCliente view = new FrmCliente(null, true);
         view.setVisible(true);
     }//GEN-LAST:event_btnBDActionPerformed
     

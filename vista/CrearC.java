@@ -155,6 +155,8 @@ public class CrearC extends javax.swing.JDialog implements Vista<User> {
         } catch (Exception e) {
             showError("Error al agregar proveedor: " + e.getMessage());
         }
+        
+        
 
     }//GEN-LAST:event_btnCrearActionPerformed
 

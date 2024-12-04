@@ -31,7 +31,6 @@ public class UserDAO extends DAO<UserDTO> {
         }
         String query = "CALL UsuariosCreate(?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-//            stmt.setInt(1, dto.getId());
             stmt.setString(1, dto.getNombre());
             stmt.setString(2, dto.getCorreo());
             stmt.setString(3, dto.getPass());
