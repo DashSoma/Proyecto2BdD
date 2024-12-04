@@ -1,4 +1,3 @@
-
 package Modelo.Producto;
 
 /**
@@ -12,20 +11,25 @@ public class Productos {
     private int codigo;
     private String nombre;
     private String categoria;
-    private double precio; 
+    private double precio;
     private int cantDisponible;
-    private int proveedor; 
+    private int proveedor;
     private LocalDate fechaPIngresado;
 
+//    public Productos() {
+//        this.codigo = 0;
+//        this.nombre = "";
+//        this.categoria = "";
+//        this.precio = 0.0;
+//        this.cantDisponible = 0;
+//        this.proveedor = 0;
+//        this.fechaPIngresado = LocalDate.now();
+//    }
+
     public Productos() {
-        this.codigo = 0;
-        this.nombre = "";
-        this.categoria = "";
-        this.precio = 0.0;
-        this.cantDisponible = 0;
-        this.proveedor = 0;
-        this.fechaPIngresado = LocalDate.now();
     }
+    
+    
 
     public Productos(int codigo, String nombre, String categoria, double precio, int cantDisponible, int proveedor, LocalDate fechaPIngresado) {
         this.codigo = codigo;
@@ -35,6 +39,12 @@ public class Productos {
         this.cantDisponible = cantDisponible;
         this.proveedor = proveedor;
         this.fechaPIngresado = fechaPIngresado;
+    }
+
+    public Productos(int codigo, String nombre, double precio) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.precio = precio;
     }
 
     // Getters y setters

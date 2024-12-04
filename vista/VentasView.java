@@ -48,41 +48,14 @@ public class VentasView extends javax.swing.JDialog {
     private ClientesView vista;
     DefaultTableModel model;
 
-    /**
-     *
-     * @param parent
-     * @param modal
-     * @param listaPlanilla lista de la planilla.
-     * @param listaCliente
-     * @param listaPuesto lista de los puestos.
-     * @param listaPColab lista de la asignación de pluses al colaborador.
-     * @param listaPluses lista de los pluses creados.
-     * @param listaC lista de los colaboradores.
-     */
-    public VentasView(java.awt.Frame parent, boolean modal, ArrayList<Ventas> listaPlanilla, ArrayList<Cliente> listaCliente, ArrayList<Proveedor> listaPuesto,
-            ArrayList<PlusesColab> listaPColab, ArrayList<Pluses> listaPluses, ArrayList<Productos> listaC) {
+    public VentasView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.listaPlanilla = listaPlanilla;
-        this.listaCliente = listaCliente;
-        this.listaPuesto = listaPuesto;
-        this.listaPColab = listaPColab;
-        this.listaPluses = listaPluses;
-        this.listaC = listaC;
+
         vista = new ClientesView();
         clienteController = new ClienteControlador(vista);
 
         setLocationRelativeTo(null);
-    }
-
-    /**
-     *
-     * @param parent
-     * @param modal
-     */
-    public VentasView(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
     }
 
     /**
@@ -446,12 +419,12 @@ public class VentasView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        if (!listaPlanilla.isEmpty()) {
-            btnPDFTodo.setVisible(true);
-            btnPDFEspecifico.setVisible(true);
-        }
-        PDFVision();
-        mostrarTabla();
+//        if (!listaPlanilla.isEmpty()) {
+//            btnPDFTodo.setVisible(true);
+//            btnPDFEspecifico.setVisible(true);
+//        }
+//        PDFVision();
+//        mostrarTabla();
 
     }//GEN-LAST:event_formWindowActivated
 
@@ -610,7 +583,10 @@ public class VentasView extends javax.swing.JDialog {
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnbucarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbucarProductoActionPerformed
-       ProductosBuscaView view = new ProductosBuscaView(null, true, listaC);
+        // Crear la vista de búsqueda de productos
+        ProductosBuscaView view = new ProductosBuscaView(null, true);
+
+        // Mostrar la vista
         view.setVisible(true);
 
         // Obtener el producto seleccionado
@@ -754,12 +730,8 @@ public class VentasView extends javax.swing.JDialog {
             // Setear los valores en los campos de texto
             txtCedCliente.setText(clienteSeleccionado.getCedula());
             txtNombreCliente.setText(clienteSeleccionado.getNombreCompleto());
-
-//            // Ahora, cuando se cree el objeto planilla, se puede usar:
-//            planilla.setCedulaEmpleado(Integer.parseInt(txtCedCliente.getText()));
-//            planilla.setNomEmpleado(txtNombreCliente.getText());
         }
-       
+
     }//GEN-LAST:event_bntBuscarClienteActionPerformed
 
     public void mostrarTabla() {

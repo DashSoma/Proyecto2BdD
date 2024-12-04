@@ -5,6 +5,7 @@
 package vista;
 
 import Modelo.Producto.Productos;
+import controlador.ProductosControlador;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -12,15 +13,13 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Chrisp
+ * @author Christian y Reyman
  */
 public class ProductosBuscaView extends javax.swing.JDialog {
 
-    Productos productos;
-    ArrayList<Productos> lista;
-    DefaultTableModel model;
-    String cedula;
-    Productos productoSeleccionado; // Nuevo atributo para guardar el producto completo
+    private ProductosControlador productosController;
+    private ProductosView vista;
+    private Productos productoSeleccionado;
 
     /**
      * Creates new form DirectorBuscaView
@@ -28,22 +27,49 @@ public class ProductosBuscaView extends javax.swing.JDialog {
     public ProductosBuscaView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
+        // Crear la vista de ProductosView
+        vista = new ProductosView(parent, modal);
+
+        // Inicializar el controlador con la vista correcta
+        productosController = new ProductosControlador(vista);
+
+        // Cargar los datos
+        productosController.readAll();
+
+        // Copiar los datos de la tabla de ProductosView a esta tabla
+        copiarDatosDeTabla(vista.getTblProductos());
     }
 
-    public ProductosBuscaView(java.awt.Frame parent, boolean modal,
-            ArrayList<Productos> lista) {
-        super(parent, modal);
-        initComponents();
-        this.lista = lista;
+    private void copiarDatosDeTabla(JTable tablaOrigen) {
+        DefaultTableModel modelOrigen = (DefaultTableModel) tablaOrigen.getModel();
+        DefaultTableModel modelDestino = (DefaultTableModel) tblProductos.getModel();
+
+        // Limpiar la tabla destino
+        modelDestino.setRowCount(0);
+
+        // Copiar todas las filas
+        for (int i = 0; i < modelOrigen.getRowCount(); i++) {
+            Object[] fila = new Object[modelOrigen.getColumnCount()];
+            for (int j = 0; j < modelOrigen.getColumnCount(); j++) {
+                fila[j] = modelOrigen.getValueAt(i, j);
+            }
+            modelDestino.addRow(fila);
+        }
     }
 
-    public JTable getTblDatos() {
-        return tblProductos;
+    // Método para establecer el producto seleccionado
+    public void setProductoSeleccionado(Productos producto) {
+        this.productoSeleccionado = producto;
     }
-    
+
     // Método para obtener el producto seleccionado
     public Productos getProductoSeleccionado() {
-        return productoSeleccionado;
+        return this.productoSeleccionado;
+    }
+
+    public JTable getTblProductos() {
+        return tblProductos;
     }
 
     /**
@@ -62,38 +88,26 @@ public class ProductosBuscaView extends javax.swing.JDialog {
         btnSeleccionar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
-        });
+        setBackground(new java.awt.Color(0, 51, 102));
 
         lblBuscar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblBuscar.setText("Buscar:");
 
         txtBuscar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBuscarKeyReleased(evt);
-            }
-        });
 
         tblProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Código", "Nombre", "Categoría", "Precio", "CantDisponible", "Proveedor"
             }
         ));
-        tblProductos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tblProductosMousePressed(evt);
-            }
-        });
         jScrollPane1.setViewportView(tblProductos);
 
         btnSeleccionar.setBackground(new java.awt.Color(0, 51, 102));
@@ -112,93 +126,51 @@ public class ProductosBuscaView extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblBuscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSeleccionar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addComponent(lblBuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addComponent(btnSeleccionar)
+                .addGap(68, 68, 68))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBuscar)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSeleccionar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        mostrarTabla();
-    }//GEN-LAST:event_formWindowActivated
-
-    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        String titulos[] = {"Codigo", "Nombre", "Categoria", "Precio", "CantidadDisponible",
-            "Proveedor"};
-        model = new DefaultTableModel(null, titulos);
-
-        for (int i = 0; i < lista.size(); i++) {
-            productos = lista.get(i);
-            if (productos.getNombre().toLowerCase().contains(txtBuscar.getText().toLowerCase())) {
-                Object nuevaFila[] = {productos.getCodigo(), productos.getNombre(),
-                    productos.getCategoria(), productos.getPrecio(), productos.getCantDisponible(),
-                    productos.getProveedor(), productos.getFechaPIngresado()};
-                model.addRow(nuevaFila);
-            }
-        }
-        tblProductos.setModel(model);
-
-    }//GEN-LAST:event_txtBuscarKeyReleased
-
-    private void tblProductosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosMousePressed
-        if (evt.getClickCount() == 2) {
-            int filaSeleccionada = tblProductos.getSelectedRow();
-            this.cedula = tblProductos.getValueAt(filaSeleccionada, 0).toString();
-            
-            // Recuperar el producto completo de la lista
-            this.productoSeleccionado = lista.get(filaSeleccionada);
-            this.dispose();
-        }
-    }//GEN-LAST:event_tblProductosMousePressed
-
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
-         if (tblProductos.getSelectedRowCount() == 1) {
-            int filaSeleccionada = tblProductos.getSelectedRow();
-            this.cedula = tblProductos.getValueAt(filaSeleccionada, 0).toString();
-            
-            // Recuperar el producto completo de la lista
-            this.productoSeleccionado = lista.get(filaSeleccionada);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar 1 registro");
-        }
-    }//GEN-LAST:event_btnSeleccionarActionPerformed
+        int row = tblProductos.getSelectedRow();
+    if (row != -1) {
+        // Obtener los datos de la fila seleccionada
+        int codigo = Integer.parseInt(tblProductos.getValueAt(row, 0).toString());
+        String nombre = tblProductos.getValueAt(row, 1).toString();
+        double precio = Double.parseDouble(tblProductos.getValueAt(row, 3).toString());
 
-    public void mostrarTabla() {
-        String titulos[] = {"Codigo", "Nombre", "Categoría",
-            "Precio", "CantDisponible", "Proveedor", "FechaProductoIngresado"};
-        model = new DefaultTableModel(null, titulos);
-        //No se usó el foreach porque el índice no lo estamos necesitando 
-        for (int i = 0; i < lista.size(); i++) {
-            productos = lista.get(i);
-            Object nuevaFila[] = {productos.getCodigo(), productos.getNombre(),
-                productos.getCategoria(), productos.getPrecio(), productos.getCantDisponible(),
-                productos.getProveedor(), productos.getFechaPIngresado()};
+        // Crear un objeto Producto con los tres datos
+        productoSeleccionado = new Productos(codigo, nombre, precio);
 
-            model.addRow(nuevaFila);
-        }
-        tblProductos.setModel(model);
+        // Cerrar la ventana
+        this.dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Seleccione un producto",
+                "Error", JOptionPane.WARNING_MESSAGE);
     }
+    }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     /**
      * @param args the command line arguments
