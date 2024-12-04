@@ -3,8 +3,6 @@ package vista;
 import Modelo.Vista.Vista;
 import Modelo.Producto.Productos;
 import Modelo.Proveedores.Proveedor;
-import clases.otro;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -14,9 +12,14 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import controlador.ProductosControlador;
-import controlador.ProveedorControlador;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 
 /**
  *
@@ -86,6 +89,11 @@ public class ProductosView extends javax.swing.JDialog implements Vista<Producto
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestión de Productos ");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         pnlDatos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Registros de Productos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 14))); // NOI18N
 
@@ -475,51 +483,40 @@ public class ProductosView extends javax.swing.JDialog implements Vista<Producto
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void bntBuscarXCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntBuscarXCategoriaActionPerformed
-//        boolean encontrado = false;
-//
-//        if (txtBuscar.getText().isEmpty()) {
-//            JOptionPane.showMessageDialog(null, "No has digitado nada");
-//            lblIndicaciónpdf.setText("");
-//        }
-//
-//        String titulos[] = {"Código", "Nombre", "Categoría",
-//            "Precio", "CantDisponible", "Proveedor", "FechaProductoIngresado"};
-//        model = new DefaultTableModel(null, titulos);
-//
-//        for (int i = 0; i < lista.size(); i++) {
-//            productos = lista.get(i);
-//
-//            if (productos.getCategoria().toLowerCase().contains(txtBuscar.getText().toLowerCase())) {
-//                Object nuevaFila[] = {productos.getCodigo(), productos.getNombre(),
-//                    productos.getCategoria(), productos.getPrecio(),
-//                    productos.getCantDisponible(), productos.getProveedor(),
-//                    productos.getFechaPIngresado()};
-//                model.addRow(nuevaFila);
-//                btnGenerarPDF.setVisible(true);
-//                btnVerTDatos.setVisible(true);
-//                lblIndicaciónpdf.setText("Imprimir todos los productos de " + productos.getCategoria() + " en PDF");
-//                btnGenerarPDF.setText("GenerarPDF");
-//                btnVerTDatos.setText("Todos los registros");
-//                encontrado = true;
-//            }
-//        }
-//
-//        if (!encontrado) {
-//            JOptionPane.showMessageDialog(null, "La categoría no coincide con el nombre ingresado \nO no existe el producto");
-//            txtBuscar.setText("");
-//        }
-//
-//        tblProductos.setModel(model);
-//        txtCant.setText(String.valueOf(model.getRowCount()));
+        String categoriaBuscada = txtBuscar.getText().trim().toLowerCase(); // Obtener la categoría buscada, convertir a minúsculas para hacer una comparación insensible a mayúsculas.
 
+        // Verificar si el campo de búsqueda está vacío
+        if (categoriaBuscada.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese una categoría para buscar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Obtener todos los productos desde el controlador
+        List<Productos> productos = productosController.readAll(); // Ahora `readAll()` devuelve una lista
+
+        // Filtrar productos por categoría
+        List<Productos> productosFiltrados = new ArrayList<>();
+        for (Productos producto : productos) {
+            if (producto.getCategoria().toLowerCase().contains(categoriaBuscada)) { // Compara la categoría de manera insensible a mayúsculas
+                productosFiltrados.add(producto);
+            }
+        }
+
+        // Verificar si se encontraron productos que coincidan con la búsqueda
+        if (productosFiltrados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontraron productos con esa categoría.", "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        // Actualizar la tabla con los productos filtrados
+        showAll(productosFiltrados);
+        btnVisibleTrue();
+        limpiar();
     }//GEN-LAST:event_bntBuscarXCategoriaActionPerformed
 
     private void btnVerTDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTDatosActionPerformed
-//        mostrarTabla();
-//        btnGenerarPDF.setVisible(false);
-//        btnVerTDatos.setVisible(false);
-//        lblIndicaciónpdf.setText("");
-//        txtBuscar.setText("");
+        btnVisibleFalse();
+        productosController.readAll();
+        limpiar();
     }//GEN-LAST:event_btnVerTDatosActionPerformed
 
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
@@ -581,18 +578,33 @@ public class ProductosView extends javax.swing.JDialog implements Vista<Producto
 
             // Confirmar éxito
             JOptionPane.showMessageDialog(this, "PDF generado exitosamente en: " + rutaCompleta);
-
+            limpiar();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error al generar el PDF: " + e.getMessage());
             e.printStackTrace();
         }
 
-        txtBuscar.setText("");
+
     }//GEN-LAST:event_btnGenerarPDFActionPerformed
 
     private void btnTotalInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTotalInventarioActionPerformed
-//        otro.calcularTotalInventario(lista);
+        List<Productos> productos = productosController.readAll();
+
+        // Calculate total inventory value
+        double totalInventario = productos.stream()
+                .mapToDouble(Productos::getPrecio)
+                .sum();
+
+        // Display total inventory value in a JOptionPane
+        JOptionPane.showMessageDialog(
+                this, "Valor total del inventario: " + totalInventario,
+                "Valor Total de Inventario", JOptionPane.INFORMATION_MESSAGE
+        );
     }//GEN-LAST:event_btnTotalInventarioActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        btnVisibleFalse();
+    }//GEN-LAST:event_formWindowActivated
 
     @Override
     public void show(Productos ent) {
@@ -696,8 +708,17 @@ public class ProductosView extends javax.swing.JDialog implements Vista<Producto
         }
     }
 
-    public JTable getTblProductos() {
-        return tblProductos;
+    public void btnVisibleTrue() {
+        btnGenerarPDF.setVisible(true);
+        lblIndicaciónpdf.setText("Generar inventario de la categoría mostrada");
+        btnGenerarPDF.setText("Generar PDF");
+        btnVerTDatos.setVisible(true);
+        btnVerTDatos.setText("Todos los datos");
+    }
+
+    public void btnVisibleFalse() {
+        btnGenerarPDF.setVisible(false);
+        btnVerTDatos.setVisible(false);
     }
 
     /**

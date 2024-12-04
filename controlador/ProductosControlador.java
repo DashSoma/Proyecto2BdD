@@ -24,6 +24,7 @@ public class ProductosControlador {
     private final Vista<Productos> vista;
     private final ProductosMapper mapper;
     private final ProveedorDAO proveedorDAO;
+    
 
     // Constructor completo
     public ProductosControlador(Vista<Productos> vista, ProductosMapper mapper, ProveedorDAO proveedorDAO) {
@@ -85,18 +86,25 @@ public class ProductosControlador {
         }
     }
 
-    // Leer todos los productos
-    public void readAll() {
-        try {
-            List<Productos> productos = dao.readAll()
-                    .stream()
-                    .map(mapper::toEnt)
-                    .toList();
-            vista.showAll(productos);
-        } catch (SQLException ex) {
-            vista.showError("Error al cargar los productos: " + ex.getMessage());
-        }
+    // Leer todos los productos y devolver la lista
+public List<Productos> readAll() {
+    try {
+        // Obtener todos los productos desde el DAO
+        List<Productos> productos = dao.readAll()
+                .stream()
+                .map(mapper::toEnt)
+                .toList();
+        
+        // Actualizar la vista con los productos obtenidos
+        vista.showAll(productos);  // Esto actualizará la tabla en la vista
+        
+        return productos;  // También devolvemos la lista de productos para usarla en otras funciones como la búsqueda
+    } catch (SQLException ex) {
+        vista.showError("Error al cargar los productos: " + ex.getMessage());
+        return new ArrayList<>();  // Devuelve una lista vacía en caso de error
     }
+}
+
 
     // Actualizar un producto
     public void update(Productos producto) {
