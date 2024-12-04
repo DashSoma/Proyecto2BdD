@@ -14,9 +14,14 @@ public class login {
     private String correo;
     private String pass;
 
+    public login(int id) {
+        this.id = id;
+    }
+
     public login() {
     }
 
+    
     public login(int id, String nombre, String correo, String pass) {
         this.id = id;
         this.nombre = nombre;
