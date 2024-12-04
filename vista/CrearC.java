@@ -146,17 +146,24 @@ public class CrearC extends javax.swing.JDialog implements Vista<User> {
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         // TODO add your handling code here:
-        try {
+//        try {
+//            user = new User(txtNombre.getText(), txtCorreo.getText(),
+//                    txtContraseña.getText());
+//            Controlador.create(user);
+//            Login view = new Login();
+//            view.setVisible(true);
+//        } catch (Exception e) {
+//            showError("Error al agregar proveedor: " + e.getMessage());
+//        }
+        
+         try {
             user = new User(txtNombre.getText(), txtCorreo.getText(),
                     txtContraseña.getText());
             Controlador.create(user);
-            Login view = new Login();
-            view.setVisible(true);
+            Controlador.readAll();
         } catch (Exception e) {
             showError("Error al agregar proveedor: " + e.getMessage());
         }
-        
-        
 
     }//GEN-LAST:event_btnCrearActionPerformed
 

@@ -8,7 +8,11 @@ import BaseDatos.DataBase;
 import User.UserDAO;
 import User.UserMapper;
 import User.User;
+import User.UserDTO;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import vista.Vista;
 
 /**
@@ -50,5 +54,18 @@ public class UserControlador {
         return log.getNombre() != null && !log.getNombre().trim().isEmpty()
                 && log.getCorreo() != null && !log.getCorreo().trim().isEmpty()
                 && log.getPass() != null && !log.getPass().trim().isEmpty();
+    }
+
+    public void readAll() {
+        try {
+            List<UserDTO> dtoList = dao.readAll();
+            List<User> UserList = dtoList.stream()
+                    .map(mapper::toEnt)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+            vista.showAll(UserList);
+        } catch (SQLException ex) {
+            vista.showError("Error al cargar los datos: " + ex.getMessage());
+        }
     }
 }

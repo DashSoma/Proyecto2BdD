@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,15 +22,15 @@ public class UserDAO extends DAO<UserDTO> {
         super(connection);
     }
 
-    public boolean validatePk(Object id) throws SQLException {
-        return read(id) == null;
+    public boolean validatePk(Object no) throws SQLException {
+        return read(no) == null;
     }
     @Override
     public boolean create(UserDTO dto) throws SQLException {
         if (dto == null || !validatePk(dto.getId())) {
             return false;
         }
-        String query = "CALL UsuariosCreate(?, ?, ?)";
+        String query = "CALL UsuariosCreate (?,?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, dto.getNombre());
             stmt.setString(2, dto.getCorreo());
@@ -43,7 +44,7 @@ public class UserDAO extends DAO<UserDTO> {
         if (id == null || String.valueOf(id).trim().isEmpty()) {
             return null;
         }
-        String query = "SELECT Id, Nombre, Correo, Pass from usuarios where id = pId(?)";
+        String query = "CALL UsuariosRead (?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, String.valueOf(id));
             try (ResultSet rs = stmt.executeQuery()) {
@@ -61,8 +62,21 @@ public class UserDAO extends DAO<UserDTO> {
 
     @Override
     public List<UserDTO> readAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+ String query = "Select Id, Nombre, Contacto, Direccion from proveedores";
+        List<UserDTO> list = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new UserDTO(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4)));
+                }
+            }
+        }
+        return list;
+    }    
 
     @Override
     public boolean update(UserDTO dto) throws SQLException {
