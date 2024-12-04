@@ -68,4 +68,17 @@ public class UserControlador {
             vista.showError("Error al cargar los datos: " + ex.getMessage());
         }
     }
+    
+    public void read() {
+    }
+
+    public boolean validatePK(int id) {
+        try {
+            return dao.validatePk(id);
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+            return false;
+        }
+    }
+    
 }

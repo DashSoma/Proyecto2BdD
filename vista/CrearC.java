@@ -161,6 +161,8 @@ public class CrearC extends javax.swing.JDialog implements Vista<User> {
                     txtContraseña.getText());
             Controlador.create(user);
             Controlador.readAll();
+            Login view = new Login();
+            view.setVisible(true);
         } catch (Exception e) {
             showError("Error al agregar proveedor: " + e.getMessage());
         }
@@ -235,12 +237,21 @@ public class CrearC extends javax.swing.JDialog implements Vista<User> {
 
     @Override
     public void showAll(List<User> ents) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (User user : ents) {
+            System.out.println(ents.toString());
+        }
+//        DefaultTableModel model = (DefaultTableModel) tblUsuarios.getModel();
+//        model.setRowCount(0);
+//        for (User p : ents) {
+//            model.addRow(new Object[]{p.getId(), p.getNombre(),
+//                p.getCorreo(), p.getPass()});
+//        }
+//        txtCant.setText(String.valueOf(model.getRowCount()));
     }
 
     @Override
     public void showMessage(String msg) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        JOptionPane.showMessageDialog(this, msg, "Informacion", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -250,6 +261,7 @@ public class CrearC extends javax.swing.JDialog implements Vista<User> {
 
     @Override
     public boolean validateRequired() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return txtNombre != null && !txtNombre.getText().trim().isEmpty();
     }
+    
 }

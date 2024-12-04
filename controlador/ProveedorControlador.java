@@ -58,15 +58,6 @@ public class ProveedorControlador {
     }
 
     public void read() {
-//        try {
-//            if (validatePK(id)){
-//                vista.showError("El ID del cultivo no está en la Base de Datos");
-//                return;
-//            }
-//            dao.read(id);
-//        } catch (SQLException ex) {
-//            vista.showError("Ocurrio un error al eliminar los datos: "+ ex.getMessage());
-//        }
 
     }
 
