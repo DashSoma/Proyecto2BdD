@@ -8,16 +8,16 @@ package User;
  *
  * @author DaniTini
  */
-public class User {
+public class login {
     private int id;
     private String nombre;
     private String correo;
     private String pass;
 
-    public User() {
+    public login() {
     }
 
-    public User(int id, String nombre, String correo, String pass) {
+    public login(int id, String nombre, String correo, String pass) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
@@ -55,6 +55,6 @@ public class User {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
-
-  
+    
+    
 }
