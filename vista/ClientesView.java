@@ -1,29 +1,28 @@
-package vista.Cliente;
+package vista;
 
-    
 import Modelo.Clientes.Cliente;
 import controlador.ClienteControlador;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
-import vista.Vista;
+import Modelo.Vista.Vista;
 
 /**
  *
  * @author DaniTini
  */
-public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
+public class ClientesView extends javax.swing.JDialog implements Vista<Cliente> {
 
     ClienteControlador clienteController;
     Cliente cliente;
     DefaultTableModel model;
 
-    public FrmCliente() {
+    public ClientesView() {
         initComponents();
     }
 
-    public FrmCliente(java.awt.Frame parent, boolean modal) {
+    public ClientesView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         clienteController = new ClienteControlador(this);
@@ -415,7 +414,7 @@ public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
         String searchQuery = txtBuscar.getText().trim().toLowerCase();
 
         if (searchQuery.isEmpty()) {
-      
+
             for (int i = 0; i < modeloOriginal.getRowCount(); i++) {
                 String id = String.valueOf(modeloOriginal.getValueAt(i, 0));
                 String nombre = String.valueOf(modeloOriginal.getValueAt(i, 1));
@@ -425,14 +424,13 @@ public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
                 model.addRow(new Object[]{id, nombre, contacto, direccion});
             }
         } else {
-            
+
             for (int i = 0; i < modeloOriginal.getRowCount(); i++) {
                 String id = String.valueOf(modeloOriginal.getValueAt(i, 0)).toLowerCase();
                 String nombre = String.valueOf(modeloOriginal.getValueAt(i, 1)).toLowerCase();
                 String contacto = String.valueOf(modeloOriginal.getValueAt(i, 2)).toLowerCase();
                 String direccion = String.valueOf(modeloOriginal.getValueAt(i, 3)).toLowerCase();
 
-           
                 if (id.contains(searchQuery) || nombre.contains(searchQuery)
                         || contacto.contains(searchQuery) || direccion.contains(searchQuery)) {
                     model.addRow(new Object[]{id, nombre, contacto, direccion});
@@ -513,9 +511,47 @@ public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
         } else {
             JOptionPane.showMessageDialog(this, "Se debe seleccionar 1 registro.");
         }
-
     }//GEN-LAST:event_btnEditarActionPerformed
+    
+    @Override
+    public void show(Cliente ent) {
+        txtCedula.setText(cliente.getCedula());
+        txtNombreCompl.setText(cliente.getNombreCompleto());
+        txtDireccion.setText(cliente.getDireccion());
+        txtTelefono.setText(cliente.getTelefono());
+        txtEmail.setText(cliente.getCorreoElectronico());
+    }
 
+    @Override
+    public void showAll(List<Cliente> clients) {
+        for (Cliente client : clients) {
+            System.out.println(client.toString());
+        }
+        DefaultTableModel model = (DefaultTableModel) tblClient.getModel();
+        model.setRowCount(0);
+        for (Cliente c : clients) {
+            model.addRow(new Object[]{c.getCedula(), c.getNombreCompleto(),
+                c.getDireccion(), c.getTelefono(), c.getCorreoElectronico()});
+        }
+        txtCant.setText(String.valueOf(model.getRowCount()));
+    }
+
+    @Override
+    public void showMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Informacion", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void showError(String err) {
+        JOptionPane.showMessageDialog(this, "Error: " + err, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public boolean validateRequired() {
+        return !txtCedula.getText().isEmpty() && !txtNombreCompl.getText().isEmpty();
+
+    }
+    
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
 //        if (pani <= 0) {
 //            for (Puestos p : listaP) {
@@ -531,7 +567,7 @@ public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void txtCantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantActionPerformed
@@ -546,14 +582,6 @@ public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreComplActionPerformed
 
-//    private boolean existe(String cedula) {
-//        for (Cliente c : lista) {
-//            if (c.getCedula().equals(cedula)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
     public JTable getTblColaborador() {
         return tblClient;
     }
@@ -572,13 +600,13 @@ public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientesView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -840,7 +868,7 @@ public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrmCliente dialog = new FrmCliente(new javax.swing.JFrame(), true);
+                ClientesView dialog = new ClientesView(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -878,41 +906,9 @@ public class FrmCliente extends javax.swing.JDialog implements Vista<Cliente> {
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void show(Cliente ent) {
-        txtCedula.setText(cliente.getCedula());
-        txtNombreCompl.setText(cliente.getNombreCompleto());
-        txtDireccion.setText(cliente.getDireccion());
-        txtTelefono.setText(cliente.getTelefono());
-        txtEmail.setText(cliente.getCorreoElectronico());
+    public void showWarnig(String warning) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public void showAll(List<Cliente> clients) {
-        for (Cliente client : clients) {
-            System.out.println(client.toString());
-        }
-        DefaultTableModel model = (DefaultTableModel) tblClient.getModel();
-        model.setRowCount(0);
-        for (Cliente c : clients) {
-            model.addRow(new Object[]{c.getCedula(), c.getNombreCompleto(),
-                c.getDireccion(), c.getTelefono(), c.getCorreoElectronico()});
-        }
-        txtCant.setText(String.valueOf(model.getRowCount()));
-    }
-
-    @Override
-    public void showMessage(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "Informacion", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    @Override
-    public void showError(String err) {
-        JOptionPane.showMessageDialog(this, "Error: " + err, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    @Override
-    public boolean validateRequired() {
-        return !txtCedula.getText().isEmpty() && !txtNombreCompl.getText().isEmpty();
-
-    }
+   
 }

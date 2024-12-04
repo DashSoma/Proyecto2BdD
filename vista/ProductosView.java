@@ -1,8 +1,8 @@
 package vista;
 
-import clases.Productos;
-import clases.Proveedor;
-import java.util.ArrayList;
+import Modelo.Vista.Vista;
+import Modelo.Producto.Productos;
+import Modelo.Proveedores.Proveedor;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -11,32 +11,35 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import controlador.ProductosControlador;
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
  * @author Chrisp
  */
-public class ProductosView extends javax.swing.JDialog {
+public class ProductosView extends javax.swing.JDialog implements Vista<Productos> {
 
-    //Array Lits y objetos de clases determinadas
-    Productos productos;
-    ArrayList<Productos> lista;
-    ArrayList<Proveedor> listaP;
-    DefaultTableModel model;
-
-    public ProductosView(java.awt.Frame parent, boolean modal, ArrayList<Productos> lista, ArrayList<Proveedor> listaP) {
-        super(parent, modal);
-        initComponents();
-        setLocationRelativeTo(null);
-        this.lista = lista;
-        this.listaP = listaP;
-    }
+    private ProductosControlador productosController;
+    private Productos producto;
+    private DefaultTableModel model;
 
     public ProductosView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        productosController = new ProductosControlador(this);
+        cargarProveedores(); // Cargar los proveedores al iniciar
+        productosController.readAll(); // Cargar todos los productos al iniciar
+    }
+
+    private void cargarProveedores() {
+        cmbProveedor.removeAllItems();
+        List<Proveedor> proveedores = productosController.readAllProveedores();
+        for (Proveedor p : proveedores) {
+            cmbProveedor.addItem(p.getNombre());
+        }
     }
 
     /**
@@ -80,11 +83,6 @@ public class ProductosView extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestión de Productos ");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
-        });
 
         pnlDatos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Registros de Productos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 14))); // NOI18N
 
@@ -366,215 +364,159 @@ public class ProductosView extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-
         try {
+            int codigo = Integer.parseInt(txtCodigo.getText().trim());
+            String nombre = txtNombre.getText().trim();
+            String categoria = txtCategoria.getText().trim();
+            double precio = Double.parseDouble(txtPrecio.getText().trim());
+            int cantidad = Integer.parseInt(txtCantDisponible.getText().trim());
+            String proveedorNombre = (String) cmbProveedor.getSelectedItem();
 
-            if (Integer.parseInt(txtCodigo.getText()) <= 0) {
-                JOptionPane.showMessageDialog(this, "El código debe ser un número positivo");
+            if (nombre.isEmpty() || categoria.isEmpty() || proveedorNombre == null) {
+                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El código debe ser un número válido");
-            return;
-        }
 
-        if (existe(Integer.parseInt(txtCodigo.getText()))) {
-            JOptionPane.showMessageDialog(this, "El código ya existe");
+            int proveedorId = obtenerIdProveedor(proveedorNombre);
+
+            // Evaluar la cantidad insertada
+            txtNombre.setText(nombre); // Para que el mensaje pueda usar el nombre
+            txtCantDisponible.setText(String.valueOf(cantidad)); // Para EvaluarCantidadInsert
+            EvaluarCantidadInsert();
+
+            producto = new Productos(codigo, nombre, categoria, precio, cantidad, proveedorId, null);
+            productosController.create(producto);
             limpiar();
-            return;
-        }
-
-        if (txtCodigo.getText().isEmpty() || txtNombre.getText().isEmpty()
-                || txtCategoria.getText().isEmpty() || txtPrecio.getText().isEmpty()
-                || txtCantDisponible.getText().isEmpty() || cmbProveedor.getSelectedItem() == null
-                || cmbProveedor.getSelectedItem().toString().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios");
-            return;
-        }
-
-        try {
-            if (Integer.parseInt(txtPrecio.getText()) <= 0) {
-                JOptionPane.showMessageDialog(this, "El precio debe ser un número positivo");
-                return;
-            }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El precio debe ser un número válido");
-            return;
+            JOptionPane.showMessageDialog(this, "Por favor, verifica los valores ingresados.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        try {
-            if (Integer.parseInt(txtCantDisponible.getText())
-                    < 0) {
-                JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa");
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número válido");
-            return;
-        }
-
-        Productos productos = new Productos();
-        productos.setCodigo(Integer.parseInt(txtCodigo.getText()));
-        productos.setNombre(txtNombre.getText());
-        productos.setCategoria(txtCategoria.getText());
-        productos.setPrecio(Integer.parseInt(txtPrecio.getText()));
-        productos.setCantDisponible(Integer.parseInt(txtCantDisponible.getText()));
-        productos.setProveedor(cmbProveedor.getSelectedItem().toString());
-
-        EvaluarCantidadInsert();
-        lista.add(productos);
-        JOptionPane.showMessageDialog(this, "Producto agregado");
-        mostrarTabla();
-        btnLimpiarActionPerformed(null);
-
     }//GEN-LAST:event_btnInsertarActionPerformed
+
+    private int obtenerIdProveedor(String nombreProveedor) {
+        List<Proveedor> proveedores = productosController.readAllProveedores();
+        return proveedores.stream()
+                .filter(p -> p.getNombre().equals(nombreProveedor))
+                .findFirst()
+                .map(Proveedor::getId)
+                .orElse(-1);
+    }
+
+    private String obtenerNombreProveedor(int idProveedor) {
+        List<Proveedor> proveedores = productosController.readAllProveedores();
+        return proveedores.stream()
+                .filter(p -> p.getId() == idProveedor)
+                .findFirst()
+                .map(Proveedor::getNombre)
+                .orElse("Desconocido");
+    }
 
     private void tblProductosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductosMousePressed
         if (evt.getClickCount() == 1) {
-            txtCodigo.setText(String.valueOf(tblProductos.getValueAt(tblProductos.getSelectedRow(), 0)));
-            txtNombre.setText(String.valueOf(tblProductos.getValueAt(tblProductos.getSelectedRow(), 1)));
-            txtCategoria.setText(String.valueOf(tblProductos.getValueAt(tblProductos.getSelectedRow(), 2)));
-            txtPrecio.setText(String.valueOf(tblProductos.getValueAt(tblProductos.getSelectedRow(), 3)));
-            txtCantDisponible.setText(String.valueOf(tblProductos.getValueAt(tblProductos.getSelectedRow(), 4)));
-            cmbProveedor.setName(String.valueOf(tblProductos.getValueAt(tblProductos.getSelectedRow(), 5)));
+            int fila = tblProductos.getSelectedRow();
+            txtCodigo.setText(String.valueOf(tblProductos.getValueAt(fila, 0)));
+            txtNombre.setText(String.valueOf(tblProductos.getValueAt(fila, 1)));
+            txtCategoria.setText(String.valueOf(tblProductos.getValueAt(fila, 2)));
+            txtPrecio.setText(String.valueOf(tblProductos.getValueAt(fila, 3)));
+            txtCantDisponible.setText(String.valueOf(tblProductos.getValueAt(fila, 4)));
+            cmbProveedor.setSelectedItem(tblProductos.getValueAt(fila, 5));
         }
     }//GEN-LAST:event_tblProductosMousePressed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         if (tblProductos.getSelectedRowCount() == 1) {
-            int resp = JOptionPane.showConfirmDialog(this, "¿Desea borrar el resgitro?");
-            if (resp == 0) {  //El usuario quiere eliminar, Respuesta si
-                int fila = tblProductos.getSelectedRow();
-                if (lista.remove(lista.get(fila))) {
-                    mostrarTabla();
-
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error de borrado");
-                }
+            int fila = tblProductos.getSelectedRow();
+            int codigo = Integer.parseInt(tblProductos.getValueAt(fila, 0).toString());
+            int confirm = JOptionPane.showConfirmDialog(this, "¿Desea borrar el registro?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                producto = new Productos();
+                producto.setCodigo(codigo);
+                productosController.delete(producto);
+                limpiar();
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Se debe seleccionar 1 registro");
+            JOptionPane.showMessageDialog(this, "Seleccione un registro para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         if (tblProductos.getSelectedRowCount() == 1) {
-            int fila = tblProductos.getSelectedRow();
-            productos = new Productos();
+            try {
+                int codigo = Integer.parseInt(txtCodigo.getText().trim());
+                String nombre = txtNombre.getText().trim();
+                String categoria = txtCategoria.getText().trim();
+                double precio = Double.parseDouble(txtPrecio.getText().trim());
+                int cantidad = Integer.parseInt(txtCantDisponible.getText().trim());
+                String proveedorNombre = (String) cmbProveedor.getSelectedItem();
 
-            if (!txtNombre.getText().isEmpty()) {
-                try {
-                    int codigo = Integer.parseInt(tblProductos.getValueAt(fila, 0).toString());
-                    productos.setCodigo(codigo);
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Código no válido para editar");
-                    txtCodigo.setText("");
-                    txtCodigo.requestFocus();
+                if (nombre.isEmpty() || categoria.isEmpty() || proveedorNombre == null) {
+                    JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                productos.setNombre(txtNombre.getText());
-                productos.setCategoria(txtCategoria.getText());
+                int proveedorId = obtenerIdProveedor(proveedorNombre);
 
-                try {
-                    int precio = Integer.parseInt(txtPrecio.getText());
-                    productos.setPrecio(precio);
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Precio no válido para editar");
-                    txtPrecio.setText("");
-                    txtPrecio.requestFocus();
-                    return;
-                }
-
-                try {
-                    int cantDisponible = Integer.parseInt(txtCantDisponible.getText());
-                    productos.setCantDisponible(cantDisponible);
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Cantidad no válida para editar");
-                    txtCantDisponible.setText("");
-                    txtCantDisponible.requestFocus();
-                    return;
-                }
-
-                productos.setProveedor((cmbProveedor.getItemAt(cmbProveedor.getSelectedIndex())));
-
+                // Evaluar la cantidad editada
+                txtNombre.setText(nombre); // Para que el mensaje pueda usar el nombre
+                txtCantDisponible.setText(String.valueOf(cantidad)); // Para EvaluarCantidadEdit
                 EvaluarCantidadEdit();
-                if (lista.set(fila, productos) != null) {
-                    JOptionPane.showMessageDialog(this, "Producto editado");
-                    mostrarTabla();
-                    btnLimpiarActionPerformed(null);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al editar");
-                }
+
+                producto = new Productos(codigo, nombre, categoria, precio, cantidad, proveedorId, null);
+                productosController.update(producto);
+                limpiar();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Por favor, verifica los valores ingresados.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Se debe seleccionar 1 registro");
+            JOptionPane.showMessageDialog(this, "Seleccione un registro para editar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
-    /**
-     * Muestra los datos de otros JDialog acerca del puesto y la cédula del
-     * Jefe, por medios de ComboBox
-     *
-     * @param evt
-     */
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        btnGenerarPDF.setVisible(false);
-        btnVerTDatos.setVisible(false);
-        if (cmbProveedor.getItemCount() <= 0) {
-            for (Proveedor p : listaP) {
-                cmbProveedor.addItem(p.getNombre());
-            }
-        }
-
-        mostrarTabla();
-    }//GEN-LAST:event_formWindowActivated
 
     private void bntBuscarXCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntBuscarXCategoriaActionPerformed
-        boolean encontrado = false;
-
-        if (txtBuscar.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No has digitado nada");
-            lblIndicaciónpdf.setText("");
-        }
-
-        String titulos[] = {"Código", "Nombre", "Categoría",
-            "Precio", "CantDisponible", "Proveedor", "FechaProductoIngresado"};
-        model = new DefaultTableModel(null, titulos);
-
-        for (int i = 0; i < lista.size(); i++) {
-            productos = lista.get(i);
-
-            if (productos.getCategoria().toLowerCase().contains(txtBuscar.getText().toLowerCase())) {
-                Object nuevaFila[] = {productos.getCodigo(), productos.getNombre(),
-                    productos.getCategoria(), productos.getPrecio(),
-                    productos.getCantDisponible(), productos.getProveedor(),
-                    productos.getFechaPIngresado()};
-                model.addRow(nuevaFila);
-                btnGenerarPDF.setVisible(true);
-                btnVerTDatos.setVisible(true);
-                lblIndicaciónpdf.setText("Imprimir todos los productos de " + productos.getCategoria() + " en PDF");
-                btnGenerarPDF.setText("GenerarPDF");
-                btnVerTDatos.setText("Todos los registros");
-                encontrado = true;
-            }
-        }
-
-        if (!encontrado) {
-            JOptionPane.showMessageDialog(null, "La categoría no coincide con el nombre ingresado \nO no existe el producto");
-            txtBuscar.setText("");
-        }
-
-        tblProductos.setModel(model);
-        txtCant.setText(String.valueOf(model.getRowCount()));
+//        boolean encontrado = false;
+//
+//        if (txtBuscar.getText().isEmpty()) {
+//            JOptionPane.showMessageDialog(null, "No has digitado nada");
+//            lblIndicaciónpdf.setText("");
+//        }
+//
+//        String titulos[] = {"Código", "Nombre", "Categoría",
+//            "Precio", "CantDisponible", "Proveedor", "FechaProductoIngresado"};
+//        model = new DefaultTableModel(null, titulos);
+//
+//        for (int i = 0; i < lista.size(); i++) {
+//            productos = lista.get(i);
+//
+//            if (productos.getCategoria().toLowerCase().contains(txtBuscar.getText().toLowerCase())) {
+//                Object nuevaFila[] = {productos.getCodigo(), productos.getNombre(),
+//                    productos.getCategoria(), productos.getPrecio(),
+//                    productos.getCantDisponible(), productos.getProveedor(),
+//                    productos.getFechaPIngresado()};
+//                model.addRow(nuevaFila);
+//                btnGenerarPDF.setVisible(true);
+//                btnVerTDatos.setVisible(true);
+//                lblIndicaciónpdf.setText("Imprimir todos los productos de " + productos.getCategoria() + " en PDF");
+//                btnGenerarPDF.setText("GenerarPDF");
+//                btnVerTDatos.setText("Todos los registros");
+//                encontrado = true;
+//            }
+//        }
+//
+//        if (!encontrado) {
+//            JOptionPane.showMessageDialog(null, "La categoría no coincide con el nombre ingresado \nO no existe el producto");
+//            txtBuscar.setText("");
+//        }
+//
+//        tblProductos.setModel(model);
+//        txtCant.setText(String.valueOf(model.getRowCount()));
 
     }//GEN-LAST:event_bntBuscarXCategoriaActionPerformed
 
     private void btnVerTDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTDatosActionPerformed
-        mostrarTabla();
-        btnGenerarPDF.setVisible(false);
-        btnVerTDatos.setVisible(false);
-        lblIndicaciónpdf.setText("");
-        txtBuscar.setText("");
+//        mostrarTabla();
+//        btnGenerarPDF.setVisible(false);
+//        btnVerTDatos.setVisible(false);
+//        lblIndicaciónpdf.setText("");
+//        txtBuscar.setText("");
     }//GEN-LAST:event_btnVerTDatosActionPerformed
 
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
@@ -646,86 +588,50 @@ public class ProductosView extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGenerarPDFActionPerformed
 
     private void btnTotalInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTotalInventarioActionPerformed
-        Productos.calcularTotalInventario(lista);
+//        otro.calcularTotalInventario(lista);
     }//GEN-LAST:event_btnTotalInventarioActionPerformed
-    /**
-     * Método para verificar que la cédula sea única
-     *
-     * @param id
-     * @return
-     */
-    public boolean existe(int id) {
-        for (int i = 0; i < lista.size(); i++) {
-            productos = lista.get(i);
-            if (productos.getCodigo() == id) {
-                return true;
-            }
-        }
-        return false;
+
+    @Override
+    public void show(Productos ent) {
+        txtCodigo.setText(String.valueOf(ent.getCodigo()));
+        txtNombre.setText(ent.getNombre());
+        txtCategoria.setText(ent.getCategoria());
+        txtPrecio.setText(String.valueOf(ent.getPrecio()));
+        txtCantDisponible.setText(String.valueOf(ent.getCantDisponible()));
+        cmbProveedor.setSelectedItem(obtenerNombreProveedor((ent.getProveedor())));
     }
 
-    /**
-     * Muestra los datos y títulos en el JTable
-     */
-    public void mostrarTabla() {
-        String titulos[] = {"Código", "Nombre", "Categoría",
-            "Precio", "CantDisponible", "Proveedor", "FechaProductoIngresado"};
+    @Override
+    public void showAll(List<Productos> productos) {
+        String[] titulos = {"Código", "Nombre", "Categoría", "Precio", "Cantidad Disponible", "Proveedor"};
         model = new DefaultTableModel(null, titulos);
-        //No se usó el foreach porque el índice no lo estamos necesitando 
-        for (int i = 0; i < lista.size(); i++) {
-            productos = lista.get(i);
-            Object nuevaFila[] = {productos.getCodigo(), productos.getNombre(),
-                productos.getCategoria(), productos.getPrecio(), productos.getCantDisponible(),
-                productos.getProveedor(), productos.getFechaPIngresado()};
-
-            model.addRow(nuevaFila);
+        for (Productos p : productos) {
+            model.addRow(new Object[]{p.getCodigo(), p.getNombre(), p.getCategoria(), p.getPrecio(), p.getCantDisponible(), obtenerNombreProveedor((p.getProveedor()))});
         }
         tblProductos.setModel(model);
-
-        txtCant.setText(String.valueOf(model.getRowCount()));
-    }
-//    public LocalDate buscarFechaDespido(int idDespido) {
-//        for (Productos d : lista) {
-//            if (d.getCedula() == idDespido) {
-//                return d.getFechaDespido();
-//            }
-//        }
-//        return null;
-//    }
-
-    private void EvaluarCantidadEdit() {
-        int cantidadDisponible = Integer.parseInt(txtCantDisponible.getText());
-
-        if (cantidadDisponible >= 1 && cantidadDisponible < 15) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "El producto " + txtNombre.getText() + " está cerca de agotarse",
-                    "Solicitud de reabastecimiento",
-                    JOptionPane.WARNING_MESSAGE
-            );
-        } else if (cantidadDisponible == 0) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "El producto " + txtNombre.getText() + " ha sido agotado",
-                    "Solicitud de reabastecimiento",
-                    JOptionPane.WARNING_MESSAGE
-            );
-        }
     }
 
-    private void EvaluarCantidadInsert() {
-        int cantidadDisponible = Integer.parseInt(txtCantDisponible.getText());
-        if (cantidadDisponible >= 1 && cantidadDisponible < 15) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "El producto " + txtNombre.getText() + " ha sido registrado con una cantidad mínima en el inventario, \n(Evalúa el reabastecimiento del producto, \nDe igual manera el producto será registrado)",
-                    "Solicitud de mayor cantidad del producto",
-                    JOptionPane.WARNING_MESSAGE
-            );
-        }
+    @Override
+    public void showMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Información", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void limpiar() {
+    @Override
+    public void showError(String err) {
+        JOptionPane.showMessageDialog(this, err, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public boolean validateRequired() {
+        return !txtCodigo.getText().isEmpty() && !txtNombre.getText().isEmpty();
+    }
+
+    @Override
+    public void showWarnig(String warning) {
+        JOptionPane.showMessageDialog(this, warning, "Precación", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void limpiar() {
         txtCodigo.setText("");
         txtNombre.setText("");
         txtCategoria.setText("");
@@ -735,11 +641,58 @@ public class ProductosView extends javax.swing.JDialog {
         txtCodigo.requestFocus();
     }
 
-    /**
-     * Obtiene la tabla de Productoses.
-     *
-     * @return Un objeto JTable que representa la tabla de Productoses.
-     */
+    private void EvaluarCantidadInsert() {
+        try {
+            int cantidadDisponible = Integer.parseInt(txtCantDisponible.getText().trim());
+
+            if (cantidadDisponible >= 1 && cantidadDisponible < 15) {
+                // Usar el método de la interfaz para mostrar advertencias
+                showWarnig(
+                        "El producto " + txtNombre.getText() + " ha sido registrado con una cantidad mínima en el inventario. "
+                        + "\nEvalúa el reabastecimiento del producto. \nDe igual manera, el producto será registrado."
+                );
+            } else if (cantidadDisponible == 0) {
+                showWarnig(
+                        "El producto " + txtNombre.getText() + " ha sido registrado con una cantidad de 0. "
+                        + "\nEs necesario realizar un reabastecimiento inmediato."
+                );
+            }
+        } catch (NumberFormatException e) {
+            // Manejo de errores si no se ingresa un número válido
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor, ingresa un valor numérico válido para la cantidad disponible.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private void EvaluarCantidadEdit() {
+        try {
+            int cantidadDisponible = Integer.parseInt(txtCantDisponible.getText().trim());
+
+            if (cantidadDisponible >= 1 && cantidadDisponible < 15) {
+                // Usar el método de la interfaz para mostrar advertencias
+                showWarnig(
+                        "El producto " + txtNombre.getText() + " está cerca de agotarse. \nEvalúa un reabastecimiento pronto."
+                );
+            } else if (cantidadDisponible == 0) {
+                showWarnig(
+                        "El producto " + txtNombre.getText() + " ha sido agotado. \nEs necesario realizar un reabastecimiento inmediato."
+                );
+            }
+        } catch (NumberFormatException e) {
+            // Manejo de errores si no se ingresa un número válido
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Por favor, ingresa un valor numérico válido para la cantidad disponible.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
     public JTable getTblProductos() {
         return tblProductos;
     }
@@ -833,4 +786,5 @@ public class ProductosView extends javax.swing.JDialog {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
+
 }

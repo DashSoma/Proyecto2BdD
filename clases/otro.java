@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
  *
  * @author Crisp
  */
-public class Productos {
+public class otro {
 
     private int codigo;
     private String nombre;
@@ -20,7 +20,7 @@ public class Productos {
     private LocalDate fechaPIngresado = LocalDate.now();
     private int vTotalInventario;
 
-    public Productos(int codigo, String nombre, String categoria, int precio, int cantDisponible, String proveedor, LocalDate fechaDespido, int vTotalInventario) {
+    public otro(int codigo, String nombre, String categoria, int precio, int cantDisponible, String proveedor, LocalDate fechaDespido, int vTotalInventario) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.categoria = categoria;
@@ -35,7 +35,7 @@ public class Productos {
      * Constructor por defecto que inicializa los atributos con valores
      * predeterminados.
      */
-    public Productos() {
+    public otro() {
         this.codigo = 0;
         this.nombre = "";
         this.categoria = "";
@@ -110,10 +110,10 @@ public class Productos {
         this.vTotalInventario = vTotalInventario;
     }
 
-    public static int calcularTotalInventario(ArrayList<Productos> listaProductos) {
+    public static int calcularTotalInventario(ArrayList<otro> listaProductos) {
         int totalPrecios = 0;
 
-        for (Productos producto : listaProductos) {
+        for (otro producto : listaProductos) {
             int precio = producto.getPrecio();
             totalPrecios += precio;
         }

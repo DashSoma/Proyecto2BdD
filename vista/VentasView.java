@@ -5,11 +5,11 @@
 package vista;
 
 import Modelo.Clientes.Cliente;
-import clases.Productos;
+import Modelo.Producto.Productos;
+import Modelo.Proveedores.Proveedor;
 import clases.Ventas;
 import clases.Pluses;
 import clases.PlusesColab;
-import clases.Proveedor;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import vista.Cliente.FrmCliente;
 
 /**
  *
@@ -46,7 +45,7 @@ public class VentasView extends javax.swing.JDialog {
     ArrayList<Productos> listaC;
     ArrayList<Proveedor> listaPuesto;
     ClienteControlador clienteController;
-    private FrmCliente vista;
+    private ClientesView vista;
     DefaultTableModel model;
 
     /**
@@ -70,7 +69,7 @@ public class VentasView extends javax.swing.JDialog {
         this.listaPColab = listaPColab;
         this.listaPluses = listaPluses;
         this.listaC = listaC;
-        vista = new FrmCliente();
+        vista = new ClientesView();
         clienteController = new ClienteControlador(vista);
 
         setLocationRelativeTo(null);
@@ -536,8 +535,8 @@ public class VentasView extends javax.swing.JDialog {
     public float getSalarioEmpleado(int idPuesto) {
         for (int i = 0; i < listaPuesto.size(); i++) {
             puestos = listaPuesto.get(i);
-            if (idPuesto == puestos.getIdPuesto()) {
-                return puestos.getIdPuesto();
+            if (idPuesto == puestos.getId()) {
+                return puestos.getId();
 
             }
         }
